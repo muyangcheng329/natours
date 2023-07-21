@@ -1,6 +1,6 @@
 # Natours Application
 
-_A real-world and full-stack web application for tour booking
+*A real-world and full-stack web application for tour booking*
 
 - Implemented server-side rendering with Node.js and Express, enhanced code stability and reusability by using and customizing middleware
 - Developed server-side website rendering (HTML/CSS/JavaScript) with Pug, integrated with Mapbox APIs to present map functions
