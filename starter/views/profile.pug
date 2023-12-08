@@ -1,0 +1,12 @@
+extends base
+
+block content
+    main.main
+        section.section-cta
+            .cta
+                cta__img.cta__img--1
+                img.cta__img.cta__img--1(src=`/img/users/${guide.photo}`, alt=`${guide.name}`)
+                .cta__content
+                    h2.heading-secondary Come and have adventures!
+                    p.cta__text= `I am ${guide.name}. My email address is ${guide.email}. I have successfully led ${tourNum} tours! `
+                    button.btn.btn--green.span-all-rows Contact me!

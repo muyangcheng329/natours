@@ -1,0 +1,43 @@
+doctype html 
+html
+    head
+        block head  
+            meta(charset='UTF-8')
+            meta(name='viewport' content='width=device-width, initial-scale=1.0')
+            link(link rel='stylesheet' href='/css/style.css')
+            link(rel='shortcut icon' type='image/png' href='/img/favicon.png')
+            link(rel='stylesheet' herf='https://fonts.googleapis.com/css?family=Lato:300,300i,700')
+            title Natours | #{title}
+
+        body(data-alert=`${alert ? alert : ''}`)    
+            include _header 
+
+            block content
+                h1 THis is a placeholder
+
+            //FOOTer
+            include _footer
+
+
+            script(src="https://unpkg.com/axios/dist/axios.min.js")
+            //script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js')
+            script(src='/js/mapbox.js')
+            script(src='/js/logout.js')
+            script(type='module',src='/js/login.js')
+            script(type='module',src='/js/updateSettings.js') 
+            script(type='module',src='/js/stripe.js')
+            script(type='module',src='/js/review.js')
+            script(type='module',src='/js/gotoprofile.js')
+            script(type='module',src='/js/signup.js')
+            script(src='https://js.stripe.com/v3/')
+            //- script(src='/js/bundle.js')
+          
+
+
+
+
+
+
+    //- h1= tour
+    //- //-h1 the park camper //是传到html的注释 -：unbuffered code，不到output的code；没有-的是buffer code
+    //- p This is just some text

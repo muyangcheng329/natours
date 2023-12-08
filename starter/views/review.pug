@@ -1,0 +1,22 @@
+extends base
+
+block content
+
+    main.main
+        if reviews.length > 0
+            each review in reviews
+                .card
+                    .card__header
+                        if review.tour && review.tour.name
+                            h4.heading-tertirary
+                                span=`${review.tour.name}`
+                            h1.card__heading=` Ratings: ${review.rating.toFixed(1)}`
+                            .card__details
+                                h4.card__text=review.review
+                            h2.heading.ma-bt-md By
+                                span=` ${review.user.name}`
+
+                    .card__footer
+                        span.card
+        else
+            h2.error__msg You have no reviews yet, go and post one!
