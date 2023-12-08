@@ -7,6 +7,10 @@ class APIFeatures{
 
     filter(){
          //Build the query
+        //const tour = await Tour.find({duration: 5, difficulty:'easy'}),
+        //{duration: 5, difficulty:'easy'} 其实就是req.query的内容
+        // 但是注意我们需要用query里面的page=2来分页，而不是过滤数据，所以需要作下列过滤：
+
         //1.1 filtering
         const queryObj = {...this.queryString} // hard copy,修改对象
         const excludedFields =['page','sort','limit','fields'];
@@ -27,7 +31,7 @@ class APIFeatures{
         if(this.queryString.sort){
             const sortBy = this.queryString.sort.split(',').join(' ');
             this.query = this.query.sort(sortBy);
-            //sort('price ratingsAverage')
+            //mongoose 对price相同的再用ratingsAverage排：sort('price ratingsAverage')
         }else{
             this.query = this.query.sort('-createdAt');
         }
@@ -45,7 +49,7 @@ class APIFeatures{
     }
 
     paginate(){
-        const page = this.queryString.page *1|| 1; //设置默认值
+        const page = this.queryString.page * 1 || 1; //从string到number，设置默认值
         const limit = this.queryString.limit *1 ||100;
         const skip =(page-1) *limit;
 

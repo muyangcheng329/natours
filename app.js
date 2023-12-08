@@ -20,8 +20,12 @@ const userRouter = require("./starter/routes/userRoutes");
 const reviewRouter = require("./starter/routes/reviewRoutes");
 const bookingRouter = require("./starter/routes/bookingRoutes");
 const viewRouter = require("./starter/routes/viewRoutes");
+const cors = require("cors");
 
 const app = express();
+
+app.use(cors({origin: 'http://localhost:3000',
+  credentials: true,}));
 
 //serving static files
 app.use(express.static(`${__dirname}/starter/public`));
@@ -53,6 +57,11 @@ app.use(compression());
 app.use(express.json({ limit: "10kb" }));
 //同上 ，cookie解析，传递到req.cookies
 app.use(cookieParser());
+app.use((req, res, next) => {
+  console.log("app.js执行，看看req.cookie:");
+  console.log(req.cookies);
+  next();
+});
 
 //data sanitization against NoSQL query injection,remove $ etc.
 app.use(mongoSanitize());
@@ -65,11 +74,6 @@ app.use(
     whitelist: ["duration"], //allow duplicate query string
   })
 );
-
-// app.use((req, res, next) => {
-//   console.log(req.cookies);
-//   next();
-// });
 
 //routes,但也是middleware,按序走，先看tourRouter然后userRouter
 app.use("/", viewRouter);

@@ -1,9 +1,10 @@
 const Tour = require('../models/tourModel');
 const Booking = require('../models/bookingModel');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(
+  'sk_test_51NUhxwH9YPrhn5kB5IRdH1Hin56CxmawqlChuxsWJBXzb203pFD9LYZwNAYJofDhygN6tUQMwdw9xBEa2uZM9LZl00rAgl4aOG'
+);
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
-const AppError = require('../utils/appError');
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.tourId);

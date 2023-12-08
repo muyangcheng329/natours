@@ -5,39 +5,40 @@ const mongoose = require("mongoose");
 
 //同步代码捕捉应该放在代码块起始位置，特别是app启动之前
 process.on("uncaughtException", (err) => {
-  console.log(err);
-  process.exit(1); //同步代码问题应该立刻终止并重启app
+    console.log(err);
+    process.exit(1); //同步代码问题应该立刻终止并重启app
 });
 
-dotenv.config({ path: "./config.env" }); //config环境变量文件
+dotenv.config({path: "./config.env"}); //config环境变量文件
 const app = require("./app");
 
-const DB = process.env.DATABASE.replace("<password>", 106518);
+// const DB = process.env.DATABASE.replace("<password>", 106518);
+const DB = 'mongodb://localhost:27017/admin';
 
 mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: true,
-    //mongodb 6.0以后不再需要useNewUrlParser, useUnifiedTopology, useFindAndModify等配置
-  })
-  .then(() => {
-    console.log("DB connection successful!");
-  });
+    .connect(DB, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: true,
+        //mongodb 6.0以后不再需要useNewUrlParser, useUnifiedTopology, useFindAndModify等配置
+    })
+    .then(() => {
+        console.log("DB connection successful!");
+    });
 
 //start a server
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
-  console.log(`app running on port ${port}`);
+    console.log(`app running on port ${port}`);
 });
 
 //所有的问题都应该原地解决，而不是依赖这里的uncaught处理，只是提供一个保底的safety net
 process.on("unhandledRejection", (err) => {
-  console.log(err);
-  // process.exit(1); //0:success 1:uncaught exception
-  server.close(() => {
-    process.exit(1);
-  });
+    console.log(err);
+    // process.exit(1); //0:success 1:uncaught exception
+    server.close(() => {
+        process.exit(1);
+    });
 });
 
 //几个改进：1、上传图片时，可以手动选择，拖动范围，剪裁；

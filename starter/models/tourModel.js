@@ -27,7 +27,7 @@ const tourSchema = new mongoose.Schema(
       enum: {
         values: ['easy', 'medium', 'difficult'],
         message: 'Difficulty is either: easy, medium, difficult',
-      },
+      }
     },
     ratingsAverage: {
       type: Number,
@@ -38,7 +38,7 @@ const tourSchema = new mongoose.Schema(
     },
     ratingsQuantity: {
       type: Number,
-      default: 0,
+      default: 0
     },
     price: {
       type: Number,
@@ -47,7 +47,7 @@ const tourSchema = new mongoose.Schema(
     priceDiscount: {
       type: Number,
       validate: {
-        validator: function (val) {
+        validator: function(val) {
           // this only points to current doc on NEW document creation
           return val < this.price;
         },
@@ -61,7 +61,7 @@ const tourSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      trim: true,
+      trim: true
     },
     imageCover: {
       type: String,
@@ -71,7 +71,7 @@ const tourSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now(),
-      select: false,
+      select: false
     },
     startDates: [Date],
     secretTour: {
@@ -83,34 +83,34 @@ const tourSchema = new mongoose.Schema(
       type: {
         type: String,
         default: 'Point',
-        enum: ['Point'],
+        enum: ['Point']
       },
       coordinates: [Number],
       address: String,
-      description: String,
+      description: String
     },
     locations: [
       {
         type: {
           type: String,
           default: 'Point',
-          enum: ['Point'],
+          enum: ['Point']
         },
         coordinates: [Number],
         address: String,
         description: String,
-        day: Number,
-      },
+        day: Number
+      }
     ],
     guides: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: 'User',
-      },
-    ],
+        ref: 'User'
+      }
+    ]
   }, //这里是定义的objects
   {
-    toJSON: { virtuals: true }, // 这里是可选的objects
+    toJSON: { virtuals: true }, // 这里是可选的objects，设置虚拟字段
     toObject: { virtuals: true },
   }
 );
@@ -120,6 +120,7 @@ tourSchema.index({ price: 1, ratingsAverage: -1 }); //1:升序
 tourSchema.index({ slug: 1 });
 tourSchema.index({ startLocation: '2dsphere' });
 
+//不用存在数据库里，比如千米和英里的换算之类的，直接使用虚拟字段
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7; //这里不能使用箭头函数，因为需要使用disk key this
 }); //由于virtual properties是虚拟的，所以不属于business logic，无法使用find()或者进行其他运算，因此放在model
@@ -131,16 +132,17 @@ tourSchema.virtual('reviews', {
   localField: '_id',
 });
 
-//a middleware that runs before .save() and .create()。 insertMany()不触发
+//这个 middleware 的目的是在保存文档之前生成一个 URL 友好的 slug，并将其保存在文档的 slug 属性中
+//runs before .save() and .create()。 insertMany()不触发
 //还可以有post save hook/post middleware，pre和post都可以有多个
 //post save hook 的function(doc, next),不能再用this，而是doc，因为处理完了
-tourSchema.pre('save', function (next) {
+tourSchema.pre('save', function(next) {
   //console.log(this) //注意这里的this就是documents currently processed，这句话pre，打印save的对象
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
-tourSchema.pre(/^find/, function (next) {
+tourSchema.pre(/^find/, function(next) {
   //js正则表达式，匹配findOne()etc.
   this.find({ secreteTour: { $ne: true } }).populate({
     path: 'guides',
@@ -150,7 +152,7 @@ tourSchema.pre(/^find/, function (next) {
   next(); //这里的this就是current query
 });
 
-tourSchema.pre('aggregate', function (next) {
+tourSchema.pre('aggregate', function(next) {
   this.pipeline().unshift({ $match: { secreteTour: { $ne: true } } }); //用unshift先过滤将进入管道的数据
   next();
 });

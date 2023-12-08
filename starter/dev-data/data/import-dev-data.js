@@ -10,8 +10,8 @@ const User = require('./../../models/userModel');
 
 dotenv.config({ path: './config.env' }); //config环境变量文件
 
-const DB = process.env.DATABASE.replace('<password>', 106518);
-
+// const DB = process.env.DATABASE.replace('<password>', 106518);
+const DB = 'mongodb://localhost:27017';
 mongoose
   .connect(DB, {
     //mongodb 6.0以后不再需要useNewUrlParser, useUnifiedTopology, useFindAndModify等配置

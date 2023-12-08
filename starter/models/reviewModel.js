@@ -43,6 +43,14 @@ reviewSchema.pre(/^find/, function(next) {
   next();
 });
 
+reviewSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'tour',
+    select: 'name'
+  });
+  next();
+});
+
 //静态方法，this指代model
 reviewSchema.statics.calcAverageRatings = async function(tourId) {
   const stats = await this.aggregate([

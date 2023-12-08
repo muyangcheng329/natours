@@ -74,9 +74,10 @@ exports.createTour = factory.createOne(Tour);
 exports.updateTour = factory.updateOne(Tour);
 exports.deleteTour = factory.deleteOne(Tour);
 
+//计算4.5分以上的tour的平均分、平均价格什么的
 exports.getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
-    //mongodb: 管道[],有各种stages
+    //mongodb: 管道[],有各种stages，先match stage，然后group stage，先匹配比
     {
       $match: { ratingAverage: { $gte: 4.5 } } //match stage, $ne:取否，match可以多次
     },
