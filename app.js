@@ -23,9 +23,10 @@ const viewRouter = require("./starter/routes/viewRoutes");
 const cors = require("cors");
 
 const app = express();
-
-app.use(cors({origin: 'http://localhost:3000',
-  credentials: true,}));
+app.use(cors())
+// app.use(cors({origin: ['http://localhost:3000',"http://127.0.0.1"],
+//   credentials: true,
+//   exposedHeaders: ["set-cookie"]}));
 
 //serving static files
 app.use(express.static(`${__dirname}/starter/public`));
@@ -58,7 +59,7 @@ app.use(express.json({ limit: "10kb" }));
 //同上 ，cookie解析，传递到req.cookies
 app.use(cookieParser());
 app.use((req, res, next) => {
-  console.log("app.js执行，看看req.cookie:");
+  console.log("解析token");
   console.log(req.cookies);
   next();
 });

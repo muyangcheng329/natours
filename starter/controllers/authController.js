@@ -20,8 +20,11 @@ const createSendToken = (user, statusCode, res) => {
             Date.now() + 15 * 24 * 6060 * 1000
         ), //毫秒计算时间
         httpOnly: true, // 浏览器cookie，禁止客户端修改cookie
-        sameSite: 'lax'
+        // sameSite: 'lax'
     };
+
+
+    console.log("生成token")
      // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; //https方式
     res.cookie('jwt', token, cookieOptions);
 
@@ -99,8 +102,9 @@ exports.protect = catchAsync(async (req, res, next) => {
         token = req.headers.authorization.split(' ')[1];
     } else if (req.cookies.jwt) {
         token = req.cookies.jwt;
-        console.log("拿到了吗")
+
     }
+
 
     if (!token) {
         return next(new AppError('Please log in to get access!', 401));
@@ -166,6 +170,7 @@ exports.restrictTo = (...roles) => {
                 new AppError('You do not have permission to perform this action', 403)
             ); //403:禁止
         }
+        console.log("当前用户角色："+ req.user.role)
         next();
     };
 };

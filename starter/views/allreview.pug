@@ -15,8 +15,9 @@ block content
                         h2.heading.ma-bt-md By
                             span=` ${review.user.name}`
                         .form__group.left
-                            button.btn.btn--small.btn--green Delete
+                            button.btn.btn--small.btn--green.delete-btn(data-review-id=review.id) Delete
 
                 .card__footer
                     span.card
+
 

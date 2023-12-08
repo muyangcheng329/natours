@@ -6,29 +6,24 @@ import { showAlert } from './alert.js';
 
 const login = async (email, password) => {
   try {
-     // browser
-    // const instance = axios.create({
-    //   withCredentials: true,
-    // })
-    // const res = await instance.post("http://127.0.0.1:3000/api/v1/users/login", {email, password});
-    // console.log(res);
     const res = await axios({
+      // withCredentials:true,
       method: 'POST',
       url: 'http://127.0.0.1:3000/api/v1/users/login',
       data: {
         email,
         password
-      }, //向api发送一个post请求
-      withCredentials:true
+      },
     });
 
     if (res.data.status === 'success') {
       showAlert('success', 'logged in successfully');
       console.log("login.js:")
       console.log(res.data);
-      // window.setTimeout(() => {
-      //   location.assign('/');
-      // }, 1500); //1.5s以后自动跳转首页
+      document.cookie = 'jwt='+res.data.token
+      window.setTimeout(() => {
+        location.assign('/');
+      }, 1500);
     }
   } catch (err) {
     console.log(err);
